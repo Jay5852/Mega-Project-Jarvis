@@ -6,17 +6,24 @@ import pygame
 import io
 import random
 import google.generativeai as genai
+from dotenv import load_dotenv
+import os
 
-# -------------------- Configuration --------------------
-MUSIC_FOLDER = r"C:\Music\JarvisSongs"  # Change to your music folder
-NEWS_API_KEY = "http://feeds.bbci.co.uk/news/rss.xml"
-GEMINI_API_KEY = "AIzaSyAfFwHxYFS1xvyc03e5N8MknRh48_G6QQ8"
+# -------------------- Load Environment Variables --------------------
+load_dotenv()
+
+MUSIC_FOLDER = os.getenv("MUSIC_FOLDER", r"C:\Music\JarvisSongs")
+NEWS_API_KEY = os.getenv("NEWS_API_KEY")
+GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
+
 genai.configure(api_key=GEMINI_API_KEY)
+
 
 # -------------------- Initialize --------------------
 recognizer = sr.Recognizer()
 pygame.mixer.init()
 stop_speaking = False  # Global flag to stop speech
+
 
 # -------------------- Text-to-Speech --------------------
 def speak(text):
@@ -42,16 +49,17 @@ def speak(text):
     except Exception as e:
         print(f"TTS Error: {e}")
 
+
 def stop_speech():
     global stop_speaking
     stop_speaking = True
+
 
 # -------------------- Gemini AI --------------------
 def ai_response(command):
     """Get short response from Gemini AI"""
     try:
         model = genai.GenerativeModel("gemini-1.5-flash")
-        # Add system instruction for short responses
         system_instruction = (
             "You are Jarvis, a helpful virtual assistant. "
             "Answer in short, concise sentences, max 2 lines."
@@ -64,6 +72,7 @@ def ai_response(command):
     except Exception as e:
         print(f"Gemini API Error: {e}")
         return "Sorry, I could not get a response from Gemini."
+
 
 # -------------------- Music --------------------
 def play_local_music():
@@ -78,6 +87,7 @@ def play_local_music():
     except Exception as e:
         speak("Error playing music.")
         print(e)
+
 
 # -------------------- News --------------------
 def get_news():
@@ -94,6 +104,7 @@ def get_news():
     except Exception as e:
         speak("Failed to fetch news.")
         print(e)
+
 
 # -------------------- Command Processor --------------------
 def process_command(command):
@@ -124,6 +135,7 @@ def process_command(command):
         # Use Gemini AI for general queries
         answer = ai_response(command)
         speak(answer)
+
 
 # -------------------- Main Loop --------------------
 if __name__ == "__main__":
