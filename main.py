@@ -10,7 +10,7 @@ import google.generativeai as genai
 # -------------------- Configuration --------------------
 MUSIC_FOLDER = r"C:\Music\JarvisSongs"  # Change to your music folder
 NEWS_API_KEY = "http://feeds.bbci.co.uk/news/rss.xml"
-GEMINI_API_KEY = "AIzaSyAfFwHxYFS1xvyc03e5N8MknRh48_G6QQ8"
+GEMINI_API_KEY = "Your API Key"
 genai.configure(api_key=GEMINI_API_KEY)
 
 # -------------------- Initialize --------------------
